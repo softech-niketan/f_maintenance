@@ -854,7 +854,13 @@ class AdminController extends CI_Controller
 
 	public function completed()
     {
+		$type = urldecode($this->uri->segment(2));
+		$data['type'] = $type;
+		
+		$search = $this->input->post('search');
+		$data['search'] = $search;
 
+if(!$search){
         $this->load->library('pagination');
         $this->load->helper('url');
         $this->load->model('Crud_model');
@@ -887,9 +893,15 @@ class AdminController extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $data['type'] = $type;
-        $data['data'] = $this->Crud_model->get_data_paged($type, $config['per_page'], $page);
+       
+      //  $data['data'] = $this->Crud_model->get_data_paged($type, $config['per_page'], $page);
+       $data['data'] = $this->Crud_model->get_data_paged($type, $config['per_page'], $page);
 
+	}else{
+		//$data['data'] = $this->Crud_model->get_data_paged411_search('pm_request');
+		$role_management_data = $this->db->query('SELECT *   FROM ' . $type . ' WHERE status !="FeedBack" ORDER BY id DESC');
+		 $data['data'] = $role_management_data->result();
+	}
         $this->load->view('header');
         $this->load->view('completed', $data);
         $this->load->view('footer');

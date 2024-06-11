@@ -57,6 +57,10 @@ if ($type == "pm_request") {
 
 
                             </div>
+                            <form class="example" action="<?php echo base_url('completed/'). $type; ?>" method="post">
+  <input type="text" placeholder="Search.." name="search">
+  <button type="submit"><i class="fa fa-search"></i></button>
+</form>
                             <div class="card-body">
                                 <table id="" class="table table-bordered table-striped">
                                     <thead>
@@ -145,8 +149,17 @@ if ($data) {
         // print_r($group_ids);
         $request_from = $this->Crud_model->get_data_by_id("user", $p->request_from, "id");
         $request_to = $this->Crud_model->get_data_by_id("user", $p->request_to, "id");
+      //  $machines = $this->Crud_model->get_data_by_id("machines", $p->machine_id, "id");
+
+      if(!$search){
+      
         $machines = $this->Crud_model->get_data_by_id("machines", $p->machine_id, "id");
 
+}else{
+
+$machines = $this->Crud_model->get_data_by_id_search("machines",  $search);
+
+}
         if ($type == "pm_request") {
             $table_name = "pm_history";
 
@@ -265,7 +278,14 @@ $i++;
 
 
                                 </table>
-                                <?php echo $this->pagination->create_links(); ?>
+                                
+                                <?php
+                                if(!$search){
+                                    echo $this->pagination->create_links();
+                                }else{
+
+                                }
+                                 ?>
 
                             </div>
                             <!-- /.card-body -->
